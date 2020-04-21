@@ -7,11 +7,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "todo_task")
 data class Task(
     @PrimaryKey(autoGenerate = true)
-    val uid: Int,
+    @ColumnInfo ( name  =  "id" )
+    val uid: Int? = null,
 
     @ColumnInfo(name = "Title")
-    val title: String?,
+    val title: String?
 
-    @ColumnInfo(name = "Description")
-    val description: String?
 )
