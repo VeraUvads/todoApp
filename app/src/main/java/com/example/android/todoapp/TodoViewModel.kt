@@ -3,10 +3,8 @@ package com.example.android.todoapp
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.todoapp.database.Task
-import com.example.android.todoapp.database.TaskDao
 import com.example.android.todoapp.database.TaskDatabase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -33,6 +31,7 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
             })?.let {
                 compositeDisposable.add(it)
             }
+        getTaskData()
     }
 
     fun getTaskData(){
@@ -41,6 +40,7 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe ({
                 if(!it.isNullOrEmpty()){
+                    tasksList.postValue(listOf())
                     tasksList.postValue(it)
                 }else{
                     tasksList.postValue(listOf())
@@ -62,6 +62,18 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteTask(task: Task) {
         dataBaseInstance?.taskDao()?.delete(task)
+            ?.subscribeOn(Schedulers.io())
+            ?.observeOn(AndroidSchedulers.mainThread())
+            ?.subscribe ({
+                getTaskData()
+            },{
+            })?.let {
+                compositeDisposable.add(it)
+            }
+    }
+
+    fun updateTask(task: Task){
+        dataBaseInstance?.taskDao()?.update(task)
             ?.subscribeOn(Schedulers.io())
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe ({

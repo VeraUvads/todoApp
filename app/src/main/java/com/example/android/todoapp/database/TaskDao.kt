@@ -16,7 +16,7 @@ interface TaskDao {
     fun delete(task: Task): Completable
 
     @Update
-    fun update(task: Task)
+    fun update(task: Task) : Completable
 
     @Query("SELECT * FROM todo_task")
     fun getAllTasks(): Single<List<Task>>

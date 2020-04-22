@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.todoapp.database.Task
 import kotlinx.android.synthetic.main.task_item.view.*
 
-class TaskAdapter (private val onDeleteClick: (Task) -> Unit) : RecyclerView.Adapter<TaskAdapter.dataViewHolder>() {
+class TaskAdapter : RecyclerView.Adapter<TaskAdapter.DataViewHolder>() {
     private var taskList = mutableListOf<Task>()
 
     fun setData(list: List<Task>) {
@@ -16,36 +16,26 @@ class TaskAdapter (private val onDeleteClick: (Task) -> Unit) : RecyclerView.Ada
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): dataViewHolder {
-        return dataViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder {
+        return DataViewHolder(
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.task_item, parent, false)
-        ) {
-            onDeleteClick.invoke(it)
-        }
+        )
     }
 
     override fun getItemCount(): Int {
         return taskList.size
     }
 
-    override fun onBindViewHolder(holder: dataViewHolder, position: Int) {
-        holder.itemView.title_item
+    override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
         holder.setData(taskList[position])
     }
 
-    inner class dataViewHolder(
-        itemView: View, val onDeleteClick: (Task) -> Unit
-    ) : RecyclerView.ViewHolder(itemView) {
-
+    inner class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun setData(task: Task) {
             itemView.apply {
                 title_item.text = task.title
-
-
             }
-
         }
-
     }
 }
