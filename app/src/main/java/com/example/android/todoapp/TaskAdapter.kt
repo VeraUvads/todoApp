@@ -9,6 +9,16 @@ import kotlinx.android.synthetic.main.task_item.view.*
 
 class TaskAdapter : RecyclerView.Adapter<TaskAdapter.DataViewHolder>() {
     private var taskList = mutableListOf<Task>()
+    private var onItemClickListener: OnItemClickListener? = null
+
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
+        this.onItemClickListener = onItemClickListener
+    }
+
+    interface OnItemClickListener {
+        fun onLongClick(position: Int)
+    }
 
     fun setData(list: List<Task>) {
         taskList.clear()
@@ -35,6 +45,10 @@ class TaskAdapter : RecyclerView.Adapter<TaskAdapter.DataViewHolder>() {
         fun setData(task: Task) {
             itemView.apply {
                 title_item.text = task.title
+                setOnLongClickListener {
+                    onItemClickListener?.onLongClick(adapterPosition)
+                    return@setOnLongClickListener true
+                }
             }
         }
     }

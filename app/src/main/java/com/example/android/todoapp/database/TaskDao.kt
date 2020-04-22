@@ -21,6 +21,9 @@ interface TaskDao {
     @Query("SELECT * FROM todo_task")
     fun getAllTasks(): Single<List<Task>>
 
+    @Query("SELECT * from todo_task WHERE id = :key")
+    fun get(key: Long): Single<Task>
+
 //    @Query("SELECT * FROM todo_task WHERE Title LIKE :title LIMIT 1")
 //    fun findByName(title: String, description: String): Task
 

@@ -14,7 +14,7 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
 
     private val compositeDisposable = CompositeDisposable()
 
-    private var dataBaseInstance: TaskDatabase ?= null
+    lateinit var dataBaseInstance: TaskDatabase
 
     var tasksList = MutableLiveData<List<Task>>()
 
@@ -23,22 +23,22 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun saveDataIntoDb(data: Task){
-        dataBaseInstance?.taskDao()?.insertAll(data)
-            ?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe ({
+        dataBaseInstance.taskDao().insertAll(data)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
             },{
-            })?.let {
+            }).let {
                 compositeDisposable.add(it)
             }
         getTaskData()
     }
 
     fun getTaskData(){
-        dataBaseInstance?.taskDao()?.getAllTasks()
-            ?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe ({
+        dataBaseInstance.taskDao().getAllTasks()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
                 if(!it.isNullOrEmpty()){
                     tasksList.postValue(listOf())
                     tasksList.postValue(it)
@@ -49,7 +49,7 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
                     Log.v("TODOdo",it.title.toString())
                 }
             },{
-            })?.let {
+            }).let {
                 compositeDisposable.add(it)
             }
     }
@@ -61,25 +61,27 @@ class TodoViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteTask(task: Task) {
-        dataBaseInstance?.taskDao()?.delete(task)
-            ?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe ({
+        dataBaseInstance.taskDao().delete(task)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
                 getTaskData()
             },{
-            })?.let {
+            }).let {
                 compositeDisposable.add(it)
             }
     }
 
+
+
     fun updateTask(task: Task){
-        dataBaseInstance?.taskDao()?.update(task)
-            ?.subscribeOn(Schedulers.io())
-            ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe ({
+        dataBaseInstance.taskDao().update(task)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({
                 getTaskData()
             },{
-            })?.let {
+            }).let {
                 compositeDisposable.add(it)
             }
     }

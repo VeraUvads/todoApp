@@ -9,7 +9,6 @@ import androidx.room.RoomDatabase
 abstract class TaskDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
 
-
     companion object {
         @Volatile
         private var databaseInstance: TaskDatabase? = null

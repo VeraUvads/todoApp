@@ -12,5 +12,4 @@ data class Task(
 
     @ColumnInfo(name = "Title")
     val title: String?
-
 )
